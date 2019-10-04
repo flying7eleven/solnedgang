@@ -1,0 +1,12 @@
+[package]
+name = "solnedgang"
+version = "0.0.1"
+description = "Library for calculating the sunrise and sunset times for a specific location on the earth."
+authors = ["Tim Hütz <tim@huetz.biz>"]
+edition = "2018"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/thuetz/solnedgang"
+
+[dependencies]
+chrono = "0.4"
