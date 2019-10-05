@@ -1,8 +1,8 @@
 use chrono::{DateTime, Datelike, Utc};
 
 pub struct SunriseSunsetCalculator {
-    latitude: f64,
-    longitude: f64,
+    pub latitude: f64,
+    pub longitude: f64,
 }
 
 impl SunriseSunsetCalculator {
