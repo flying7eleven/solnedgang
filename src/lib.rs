@@ -33,7 +33,7 @@ impl fmt::Display for Location {
     }
 }
 
-///
+/// Calculator for determine the sunrise and sunset times.
 pub struct SunriseSunsetCalculator {
     location: Location,
 }
