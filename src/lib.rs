@@ -1,6 +1,6 @@
-use chrono::{DateTime, Datelike, Local, Utc};
+use chrono::{DateTime, Datelike, Utc};
 
-struct SunriseSunsetCalculator {
+pub struct SunriseSunsetCalculator {
     latitude: f64,
     longitude: f64,
 }
@@ -148,7 +148,7 @@ impl SunriseSunsetCalculator {
         t * 36_525.0 + 2_451_545.0
     }
 
-    fn calc_sunrise_utc(&self, date: DateTime<Utc>) -> f64 {
+    pub fn calc_sunrise_utc(&self, date: DateTime<Utc>) -> f64 {
         let julian_date = self.calc_jd(date.year(), date.month(), date.day());
         let t = self.calc_time_julian_cent(julian_date);
         // first pass to approximate sunrise
@@ -170,7 +170,7 @@ impl SunriseSunsetCalculator {
         720.0 - time_diff - eq_time // return time in minutes from midnight
     }
 
-    fn calc_sunset_utc(&self, date: DateTime<Utc>) -> f64 {
+    pub fn calc_sunset_utc(&self, date: DateTime<Utc>) -> f64 {
         let julian_date = self.calc_jd(date.year(), date.month(), date.day());
         let t = self.calc_time_julian_cent(julian_date);
         // first pass to approximate sunset
