@@ -1,7 +1,10 @@
 use chrono::{DateTime, Datelike, Utc};
 
 pub struct SunriseSunsetCalculator {
+    /// The latitude for the position for which the time should be calculated for.
     pub latitude: f64,
+
+    /// The longitude for the position for which the time should be calculated for.
     pub longitude: f64,
 }
 
@@ -148,6 +151,10 @@ impl SunriseSunsetCalculator {
         t * 36_525.0 + 2_451_545.0
     }
 
+    /// Calculates the the time for the sunrise in minutes from midnight (UTC).
+    ///
+    /// # Arguments
+    /// * `date` - The date for which the sunrise time should be calculated for.
     pub fn calc_sunrise_utc(&self, date: DateTime<Utc>) -> f64 {
         let julian_date = self.calc_jd(date.year(), date.month(), date.day());
         let t = self.calc_time_julian_cent(julian_date);
@@ -170,6 +177,10 @@ impl SunriseSunsetCalculator {
         720.0 - time_diff - eq_time // return time in minutes from midnight
     }
 
+    /// Calculates the the time for the sunset in minutes from midnight (UTC).
+    ///
+    /// # Arguments
+    /// * `date` - The date for which the sunset time should be calculated for.
     pub fn calc_sunset_utc(&self, date: DateTime<Utc>) -> f64 {
         let julian_date = self.calc_jd(date.year(), date.month(), date.day());
         let t = self.calc_time_julian_cent(julian_date);
