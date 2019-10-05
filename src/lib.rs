@@ -1,6 +1,15 @@
 use chrono::{DateTime, Datelike, Utc};
 use std::fmt;
 
+/// A list of well-known places for the library.
+pub enum Location {
+    /// Berlin, Germany
+    EuropeGermanyBerlin,
+
+    /// Düsseldorf, Germany
+    EuropeGermanyDuesseldorf,
+}
+
 /// Representation of a location on earth.
 pub struct Coordinates {
     latitude: f64,
@@ -30,6 +39,25 @@ impl Coordinates {
 impl fmt::Display for Coordinates {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         write!(f, "({}, {})", self.latitude, self.longitude)
+    }
+}
+
+impl From<Location> for Coordinates {
+    /// Create a new instance of the `Coordinates` class based on a `Location`.
+    ///
+    /// # Examples
+    ///
+    /// Create the coordinates for Berlin, Germany:
+    /// ```
+    /// use solnedgang::{Coordinates, Location};
+    ///
+    /// let berlin = Coordinates::from(Location::EuropeGermanyBerlin);
+    /// ```
+    fn from(location: Location) -> Self {
+        match location {
+            Location::EuropeGermanyBerlin => Coordinates::new(52.51861, 13.37609),
+            Location::EuropeGermanyDuesseldorf => Coordinates::new(51.21794, 6.76165),
+        }
     }
 }
 
