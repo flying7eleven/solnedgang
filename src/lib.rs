@@ -1,11 +1,58 @@
 use chrono::{DateTime, Datelike, Utc};
+use std::fmt;
 
+/// Representation of a location on earth.
+pub struct Location {
+    latitude: f64,
+    longitude: f64,
+}
+
+impl Location {
+    /// Create a new `Location` instance from a pair of latitude and longitude in decimal representation.
+    ///
+    /// # Examples
+    ///
+    /// To create a new instance of this class and print the coordinates to the console:
+    /// ```
+    /// use solnedgang::Location;
+    ///
+    /// let duesseldorf = Location::new(51.21794, 6.76165);
+    /// println!("GPS coordinates for Düsseldorf, Germany are: {}", duesseldorf);
+    /// ```
+    pub fn new(latitude: f64, longitude: f64) -> Location {
+        Location {
+            latitude,
+            longitude,
+        }
+    }
+}
+
+impl fmt::Display for Location {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        write!(f, "({}, {})", self.latitude, self.longitude)
+    }
+}
+
+///
 pub struct SunriseSunsetCalculator {
-    /// The latitude for the position for which the time should be calculated for.
-    pub latitude: f64,
+    location: Location,
+}
 
-    /// The longitude for the position for which the time should be calculated for.
-    pub longitude: f64,
+impl From<Location> for SunriseSunsetCalculator {
+    /// Create a new instance of the `SunriseSunsetCalculator` class based on the location supplied.
+    ///
+    /// # Examples
+    ///
+    /// Create the calculator for Düsseldorf, Germany:
+    /// ```
+    /// use solnedgang::{SunriseSunsetCalculator, Location};
+    ///
+    /// let duesseldorf = Location::new(51.21794, 6.76165);
+    /// let calculator = SunriseSunsetCalculator::from(duesseldorf);
+    /// ```
+    fn from(location: Location) -> Self {
+        SunriseSunsetCalculator { location }
+    }
 }
 
 impl SunriseSunsetCalculator {
@@ -161,8 +208,8 @@ impl SunriseSunsetCalculator {
         // first pass to approximate sunrise
         let mut eq_time = self.calc_equation_of_time(t);
         let mut solar_dec = self.calc_sun_declination(t);
-        let mut hour_angle = self.calc_hour_angle_sunrise(self.latitude, solar_dec);
-        let mut delta = self.longitude + hour_angle.to_degrees();
+        let mut hour_angle = self.calc_hour_angle_sunrise(self.location.latitude, solar_dec);
+        let mut delta = self.location.longitude + hour_angle.to_degrees();
         let mut time_diff = 4.0 * delta; // in minutes of time
         let time_utc = 720.0 - time_diff - eq_time; // in minutes
         let newt = self.calc_time_julian_cent(self.calc_jdfrom_julian_cent(t) + time_utc / 1_440.0);
@@ -170,8 +217,8 @@ impl SunriseSunsetCalculator {
         eq_time = self.calc_equation_of_time(newt);
         solar_dec = self.calc_sun_declination(newt);
 
-        hour_angle = self.calc_hour_angle_sunrise(self.latitude, solar_dec);
-        delta = self.longitude + hour_angle.to_degrees();
+        hour_angle = self.calc_hour_angle_sunrise(self.location.latitude, solar_dec);
+        delta = self.location.longitude + hour_angle.to_degrees();
         time_diff = 4.0 * delta;
 
         720.0 - time_diff - eq_time // return time in minutes from midnight
@@ -187,8 +234,8 @@ impl SunriseSunsetCalculator {
         // first pass to approximate sunset
         let mut eq_time = self.calc_equation_of_time(t);
         let mut solar_dec = self.calc_sun_declination(t);
-        let mut hour_angle = self.calc_hour_angle_sunset(self.latitude, solar_dec);
-        let mut delta = self.longitude + hour_angle.to_degrees();
+        let mut hour_angle = self.calc_hour_angle_sunset(self.location.latitude, solar_dec);
+        let mut delta = self.location.longitude + hour_angle.to_degrees();
         let mut time_diff = 4.0 * delta; // in minutes of time
         let mut time_utc = 720.0 - time_diff - eq_time; // in minutes
         let newt = self.calc_time_julian_cent(self.calc_jdfrom_julian_cent(t) + time_utc / 1_440.0);
@@ -196,8 +243,8 @@ impl SunriseSunsetCalculator {
         eq_time = self.calc_equation_of_time(newt);
         solar_dec = self.calc_sun_declination(newt);
 
-        hour_angle = self.calc_hour_angle_sunset(self.latitude, solar_dec);
-        delta = self.longitude + hour_angle.to_degrees();
+        hour_angle = self.calc_hour_angle_sunset(self.location.latitude, solar_dec);
+        delta = self.location.longitude + hour_angle.to_degrees();
         time_diff = 4.0 * delta;
         time_utc = 720.0 - time_diff - eq_time; // in minutes
 
@@ -213,10 +260,8 @@ mod tests {
 
     #[test]
     fn calculating_sunrise_in_utc_seconds_works_for_duesseldorf_germany() {
-        let calculator = SunriseSunsetCalculator {
-            latitude: 51.21875,
-            longitude: 6.76341,
-        };
+        let location = Location::new(51.21875, 6.76341);
+        let calculator = SunriseSunsetCalculator { location };
 
         let test_date = Utc.ymd(2019, 10, 4).and_hms(0, 0, 0);
 
@@ -232,10 +277,8 @@ mod tests {
 
     #[test]
     fn calculating_sunset_in_utc_seconds_works_for_duesseldorf_germany() {
-        let calculator = SunriseSunsetCalculator {
-            latitude: 51.21875,
-            longitude: 6.76341,
-        };
+        let location = Location::new(51.21875, 6.76341);
+        let calculator = SunriseSunsetCalculator { location };
 
         let test_date = Utc.ymd(2019, 10, 4).and_hms(0, 0, 0);
 
