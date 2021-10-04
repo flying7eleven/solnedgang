@@ -2,11 +2,18 @@
 name = "solnedgang"
 version = "0.0.3"
 description = "Library for calculating the sunrise and sunset times for a specific location on the earth."
-authors = ["Tim Hütz <tim+createsio@huetz.biz>"]
+authors = ["Tim Janke <tim+github@janke.biz>"]
 edition = "2018"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/thuetz/solnedgang"
+repository = "https://github.com/flying7eleven/solnedgang"
+documentation = "https://docs.rs/solnedgang"
+keywords = ["subset", "sunrise", "time"]
+categories = ["date-and-time"]
+exclude = [".github/", ".gitignore"]
+
+[badges]
+maintenance = { status = "passively-maintained" }
 
 [dependencies]
 chrono = "0.4"
