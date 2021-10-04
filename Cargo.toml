@@ -8,7 +8,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/flying7eleven/solnedgang"
 documentation = "https://docs.rs/solnedgang"
-keywords = ["subset", "sunrise", "time"]
+keywords = ["sunset", "sunrise", "time"]
 categories = ["date-and-time"]
 exclude = [".github/", ".gitignore"]
 
